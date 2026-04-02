@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "495340041439",
+    "project_id": "boifiok",
+    "storage_bucket": "boifiok.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495340041439:android:d0721ad2c33f5dc815656a",
+        "android_client_info": {
+          "package_name": "com.example.boifiok"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "495340041439-hi9dusnoee6ee53mpjt0b0tht076ovt1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.boifiok",
+            "certificate_hash": "0523305e941f57e0c0d57879ad77e24c29123bef"
+          }
+        },
+        {
+          "client_id": "495340041439-en73o972argbenuk16lpcj553khig4u3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh3upjZd274M0b4exxUuhkjoETXOG3vFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "495340041439-en73o972argbenuk16lpcj553khig4u3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "495340041439-b99a5l481i5pkapu2qon44k8orv9601s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.boifiok"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

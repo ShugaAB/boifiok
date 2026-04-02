@@ -1,77 +1,145 @@
 import 'package:boifiok/user/auth/model/colours.dart';
 import 'package:boifiok/user/auth/screen/button.dart';
-import 'package:boifiok/user/auth/screen/login.dart';
+import 'package:boifiok/user/auth/screen/signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ForgetPassword extends StatefulWidget {
-  const ForgetPassword({super.key});
+
+class ForgotPassword extends ConsumerStatefulWidget {
+  const ForgotPassword({super.key});
 
   @override
-  State<ForgetPassword> createState() => _ForgetPasswordState();
+  ConsumerState<ForgotPassword> createState() => _LoginScreenState();
 }
 
-class _ForgetPasswordState extends State<ForgetPassword> {
+class _LoginScreenState extends ConsumerState<ForgotPassword> {
+
+   TextEditingController emailController = TextEditingController();
+
+   @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  Future  passwordReset() async{
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
+
+    //  if (!mounted) return; 
+
+      showDialog(
+        context: context, 
+        builder: (context){
+          return AlertDialog(
+            content: Text('Password reset link sent! Check your email'),
+          );
+        });
+    } on FirebaseAuthException 
+    catch (e) {
+      showDialog(
+        context: context, 
+        builder: (context){
+          return AlertDialog(
+            content: Text(e.message.toString()),
+          );
+        });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: true,
-       // appBar: AppBar(),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40
-              ),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Forgot password", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30),),
-                    
-                    SizedBox(height: 15),
-                    Text("Enter your email to receive an email to reset your password", style: TextStyle( color: Colors.black, fontSize: 16),),
-                    SizedBox(height: 40),
-                          TextField(
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
-                                hintText: 'Email',
-                                filled: true,
-                                fillColor: Colors.white,
-                                hoverColor: Colors.white,
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black12, width: 3),
-                                  borderRadius: BorderRadius.circular(10)),
-                                  focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.purple, width: 3),
-                                  borderRadius: BorderRadius.circular(10)),
-                                 ),
-                                 style: TextStyle(),
-                                 ),
-                    
-                    SizedBox(height: 15),
-                    Button(onTap: (){}, 
-                    buttonText: 'Send'),
+    double height =  MediaQuery.of(context).size.height;
+    return Scaffold(
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 80),
+          child: 
+             Column(
+              children: [
+                Center(child: Image.asset('images/boifiok.jpg', height: 60,)),
+                SizedBox(height: 40),
+                Container(
+                  width: 400,
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 20,
+                        spreadRadius: 6,
+                        color: Colors.black.withValues(alpha: 0.06),
+                      )
+                    ]
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Center(child: Image.asset("images/email.png", height: 60,)),
+                      SizedBox(height: 20),
+                           Text('Forgot Password?', 
+                            style: TextStyle(color: Colors.black, 
+                            fontSize: 30, 
+                            fontWeight: FontWeight.bold),),
+                            SizedBox(height: 10),
+                            Text('Enter your email to reset your password'),
                           SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Already have account?", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                              SizedBox(width:4),
-                              GestureDetector(
-                                child: Text("Login", style: TextStyle(color: AppColors.lightGreen, fontWeight: FontWeight.bold)),
-                                onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
-                                },),
-                            ],
-                          )
-                  ],
+
+                      TextField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          prefixIcon: IconButton(
+                            onPressed: (){}, 
+                            icon: Icon(Icons.email_outlined, size: 16.0,)),
+                            hintText: 'Email',
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.black12, width: 1
+                              ), borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.black12,
+                              ),
+                              borderRadius: BorderRadius.circular(10)
+                            )
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Button(onTap: passwordReset, 
+                      buttonText: 'Reset Password'),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Don't have an account?", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                          SizedBox(width: 3),
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> SignupScreen()));
+                            },
+                            child: Text('Sign up', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.lightGreen),))
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
+              ],
             ),
-          )
-      ),
-    ));
+          ),
+        ),
+      
+    );
   }
 }
+
+
+
+
