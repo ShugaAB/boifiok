@@ -1,0 +1,25 @@
+import 'package:boifiok/user/auth/service/google_auth.dart';
+import 'package:flutter/material.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: GestureDetector(
+          onTap: () async {
+            await FirebaseServices().googleSignIn.signOut();
+          },
+          child: Text('Log Out', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),)),
+      ),
+    );
+  }
+}
